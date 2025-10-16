@@ -56,6 +56,7 @@ libproj-dev \
 gdal-bin \
 python3-setuptools \
 python3-pip \
+python3-venv \
 tzdata \
 cron \
 rsyslog \
@@ -80,7 +81,14 @@ npm
 # #ln -s /usr/bin/pip3 /usr/bin/pip && \
 # python3.7 -m pip install --upgrade pip==21.3.1 && \
 # apt-get install -yq vim
-RUN python3 -m pip install --upgrade pip
+
+# RUN python3 -m pip install --upgrade pip
+# Create and activate a virtual environment
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Now, upgrade pip *inside* the virtual environment
+RUN pip install --upgrade pip
 
 # Install Python libs from requirements.txt.
 FROM builder_base_cols as python_libs_cols
