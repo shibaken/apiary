@@ -49,6 +49,7 @@ apt-get upgrade -y && \
 apt-get install --no-install-recommends -y \
 wget \
 git \
+bzip2 \
 libmagic-dev \
 gcc \
 binutils \
