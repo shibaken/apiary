@@ -73,27 +73,30 @@ software-properties-common \
 imagemagick \
 npm
 
-RUN add-apt-repository ppa:deadsnakes/ppa && \
-apt-get update && \
-apt-get install --no-install-recommends -y python3.7 python3.7-dev python3.7-distutils && \
-ln -s /usr/bin/python3.7 /usr/bin/python && \
-#ln -s /usr/bin/pip3 /usr/bin/pip && \
-python3.7 -m pip install --upgrade pip==21.3.1 && \
-apt-get install -yq vim
+# RUN add-apt-repository ppa:deadsnakes/ppa && \
+# apt-get update && \
+# apt-get install --no-install-recommends -y python3.7 python3.7-dev python3.7-distutils && \
+# ln -s /usr/bin/python3.7 /usr/bin/python && \
+# #ln -s /usr/bin/pip3 /usr/bin/pip && \
+# python3.7 -m pip install --upgrade pip==21.3.1 && \
+# apt-get install -yq vim
+RUN python3 -m pip install --upgrade pip
 
 # Install Python libs from requirements.txt.
 FROM builder_base_cols as python_libs_cols
 WORKDIR /app
 COPY requirements.txt ./
-RUN python3.7 -m pip install --no-cache-dir -r requirements.txt \
-  # Update the Django <1.11 bug in django/contrib/gis/geos/libgeos.py
-  # Reference: https://stackoverflow.com/questions/18643998/geodjango-geosexception-error
-  # && sed -i -e "s/ver = geos_version().decode()/ver = geos_version().decode().split(' ')[0]/" /usr/local/lib/python2.7/dist-packages/django/contrib/gis/geos/libgeos.py \
-  && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
+# RUN python3.7 -m pip install --no-cache-dir -r requirements.txt \
+#   # Update the Django <1.11 bug in django/contrib/gis/geos/libgeos.py
+#   # Reference: https://stackoverflow.com/questions/18643998/geodjango-geosexception-error
+#   # && sed -i -e "s/ver = geos_version().decode()/ver = geos_version().decode().split(' ')[0]/" /usr/local/lib/python2.7/dist-packages/django/contrib/gis/geos/libgeos.py \
+#   && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
+# Install Python libraries from requirements.txt using the system's Python 3.12
+RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
-COPY libgeos.py.patch /app/
-RUN patch /usr/local/lib/python3.7/dist-packages/django/contrib/gis/geos/libgeos.py /app/libgeos.py.patch && \
-rm /app/libgeos.py.patch
+# COPY libgeos.py.patch /app/
+# RUN patch /usr/local/lib/python3.7/dist-packages/django/contrib/gis/geos/libgeos.py /app/libgeos.py.patch && \
+# rm /app/libgeos.py.patch
 
 # Install the project (ensure that frontend projects have been built prior to this step).
 FROM python_libs_cols
