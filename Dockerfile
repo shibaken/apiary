@@ -57,6 +57,7 @@ gdal-bin \
 python3-setuptools \
 python3-pip \
 python3-venv \
+python3-dev \
 tzdata \
 cron \
 rsyslog \
