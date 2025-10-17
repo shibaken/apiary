@@ -134,7 +134,7 @@ COPY startup.sh /
 RUN chmod 0644 /etc/cron.d/dockercron && \
 crontab /etc/cron.d/dockercron && \
 touch /var/log/cron.log && \
-service cron start && \
+# service cron start && \
 chmod 755 /startup.sh
 # cron end
 
