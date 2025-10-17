@@ -6,7 +6,13 @@ name: Docker Build Test
 
 # Controls when the workflow will run
 # This workflow runs on any push to any branch in your fork
-on: [push]
+# Controls when the workflow will run
+on:
+  # This workflow runs on any push to any branch in your fork
+  push:
+
+  # This allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
