@@ -1,0 +1,33 @@
+
+# .github/workflows/build-test.yml
+
+# Name for this workflow
+name: Docker Build Test
+
+# Controls when the workflow will run
+# This workflow runs on any push to any branch in your fork
+# Controls when the workflow will run
+on:
+  # This workflow runs on any push to any branch in your fork
+  push:
+
+  # This allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # This is the main step: build the Docker image
+    # It corresponds to the 'Docker@2' task in your azure-pipelines.yml
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
