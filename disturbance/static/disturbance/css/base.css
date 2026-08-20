@@ -139,10 +139,9 @@
     border-color: #5393d2 !important;
 }
 
-/* Bring app content inline with header logo and navbar */
-div#app .container {
-    padding: 0 40px 0 40px;
-    margin-bottom: 45px;
+div#app>.container:first-of-type {
+    padding-right: 1.5rem !important;
+    padding-left: 1.5rem !important;
 }
 
 div#app .container h3 {
