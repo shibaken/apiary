@@ -24,162 +24,158 @@
           </div>
         </div>
 
-        <div class="mb-3">
-          <div class="card card-default sticky-top">
-            <div class="card-header">Workflow</div>
-            <div class="card-body py-2">
-              <strong>Status</strong><br />
-              {{ proposal.processing_status }}
-            </div>
-            <div v-if="!isFinalised" class="card-body py-2 border-top">
-              <div class="row">
-                <div class="col-sm-12 top-buffer-s">
-                  <strong>Currently assigned to</strong>
-                  <div class="mb-3">
-                    <template
-                      v-if="proposal.processing_status == 'With Approver'"
+        <div class="card card-default sticky-top">
+          <div class="card-header">Workflow</div>
+          <div class="card-body py-2">
+            <strong>Status</strong><br />
+            {{ proposal.processing_status }}
+          </div>
+          <div v-if="!isFinalised" class="card-body py-2 border-top">
+            <div class="row">
+              <div class="col-sm-12 top-buffer-s">
+                <strong>Currently assigned to</strong>
+                <div class="mb-3">
+                  <template
+                    v-if="proposal.processing_status == 'With Approver'"
+                  >
+                    <select
+                      ref="assigned_officer"
+                      :disabled="!canAction"
+                      class="form-select"
+                      v-model="proposal.assigned_approver"
                     >
-                      <select
-                        ref="assigned_officer"
-                        :disabled="!canAction"
-                        class="form-select"
-                        v-model="proposal.assigned_approver"
+                      <option
+                        v-for="member in proposal.allowed_assessors"
+                        :value="member.id"
+                        :key="member.id"
                       >
-                        <option
-                          v-for="member in proposal.allowed_assessors"
-                          :value="member.id"
-                          :key="member.id"
-                        >
-                          {{ member.first_name }} {{ member.last_name }}
-                        </option>
-                      </select>
-                      <a
-                        v-if="
-                          canAssess &&
-                          proposal.assigned_approver !=
-                            proposal.current_assessor.id
-                        "
-                        @click.prevent="assignRequestUser()"
-                        class="actionBtn float-end"
-                        >Assign to me</a
+                        {{ member.first_name }} {{ member.last_name }}
+                      </option>
+                    </select>
+                    <a
+                      v-if="
+                        canAssess &&
+                        proposal.assigned_approver !=
+                          proposal.current_assessor.id
+                      "
+                      @click.prevent="assignRequestUser()"
+                      class="actionBtn float-end"
+                      >Assign to me</a
+                    >
+                  </template>
+                  <template v-else>
+                    <select
+                      ref="assigned_officer"
+                      :disabled="!canAction"
+                      class="form-select"
+                      v-model="proposal.assigned_officer"
+                    >
+                      <option
+                        v-for="member in proposal.allowed_assessors"
+                        :value="member.id"
+                        :key="member.id"
                       >
-                    </template>
-                    <template v-else>
-                      <select
-                        ref="assigned_officer"
-                        :disabled="!canAction"
-                        class="form-select"
-                        v-model="proposal.assigned_officer"
-                      >
-                        <option
-                          v-for="member in proposal.allowed_assessors"
-                          :value="member.id"
-                          :key="member.id"
-                        >
-                          {{ member.first_name }} {{ member.last_name }}
-                        </option>
-                      </select>
-                      <a
-                        v-if="
-                          canAssess &&
-                          proposal.assigned_officer !=
-                            proposal.current_assessor.id
-                        "
-                        @click.prevent="assignRequestUser()"
-                        class="actionBtn float-end"
-                        >Assign to me</a
-                      >
-                    </template>
-                  </div>
+                        {{ member.first_name }} {{ member.last_name }}
+                      </option>
+                    </select>
+                    <a
+                      v-if="
+                        canAssess &&
+                        proposal.assigned_officer !=
+                          proposal.current_assessor.id
+                      "
+                      @click.prevent="assignRequestUser()"
+                      class="actionBtn float-end"
+                      >Assign to me</a
+                    >
+                  </template>
                 </div>
               </div>
             </div>
-            <template
-              v-if="
-                proposal.processing_status == 'With Assessor (Requirements)' ||
-                proposal.processing_status == 'With Approver' ||
-                isFinalised
-              "
-            >
-              <div class="card-body py-2 border-top">
-                <div class="col-sm-12">
-                  <strong>Proposal</strong>
-                  <a
-                    class="actionBtn"
-                    v-if="!showingProposal"
-                    @click.prevent="toggleProposal()"
-                    >Show Proposal</a
-                  >
-                  <a class="actionBtn" v-else @click.prevent="toggleProposal()"
-                    >Hide Proposal</a
-                  >
-                </div>
+          </div>
+          <template
+            v-if="
+              proposal.processing_status == 'With Assessor (Requirements)' ||
+              proposal.processing_status == 'With Approver' ||
+              isFinalised
+            "
+          >
+            <div class="card-body py-2 border-top">
+              <div class="col-sm-12">
+                <strong>Proposal</strong>
+                <a
+                  class="actionBtn"
+                  v-if="!showingProposal"
+                  @click.prevent="toggleProposal()"
+                  >Show Proposal</a
+                >
+                <a class="actionBtn" v-else @click.prevent="toggleProposal()"
+                  >Hide Proposal</a
+                >
               </div>
-            </template>
-            <template
-              v-if="
-                proposal.processing_status == 'With Approver' || isFinalised
-              "
-            >
-              <div class="card-body py-2 border-top">
-                <div class="col-sm-12">
-                  <strong>Requirements</strong>
-                  <a
-                    class="actionBtn"
-                    v-if="!showingRequirements"
-                    @click.prevent="toggleRequirements()"
-                    >Show Requirements</a
-                  >
-                  <a
-                    class="actionBtn"
-                    v-else
-                    @click.prevent="toggleRequirements()"
-                    >Hide Requirements</a
-                  >
-                </div>
+            </div>
+          </template>
+          <template
+            v-if="proposal.processing_status == 'With Approver' || isFinalised"
+          >
+            <div class="card-body py-2 border-top">
+              <div class="col-sm-12">
+                <strong>Requirements</strong>
+                <a
+                  class="actionBtn"
+                  v-if="!showingRequirements"
+                  @click.prevent="toggleRequirements()"
+                  >Show Requirements</a
+                >
+                <a
+                  class="actionBtn"
+                  v-else
+                  @click.prevent="toggleRequirements()"
+                  >Hide Requirements</a
+                >
               </div>
-            </template>
-            <div class="card-body border-top" v-if="!isFinalised && canAction">
-              <template v-if="proposal.processing_status == 'With Assessor'">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <div class="row mb-2">
-                      <strong>Action</strong>
-                    </div>
+            </div>
+          </template>
+          <div class="card-body border-top" v-if="!isFinalised && canAction">
+            <template v-if="proposal.processing_status == 'With Assessor'">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="row mb-2">
+                    <strong>Action</strong>
                   </div>
                 </div>
-                <div class="col-sm-12">
-                  <button
-                    style="width: 80%"
-                    class="btn btn-primary top-buffer-s"
-                    :disabled="proposal.can_user_edit"
-                    @click.prevent="amendmentRequest()"
-                  >
-                    Request Amendment
-                  </button>
-                </div>
-                <div class="col-sm-12">
-                  <button
-                    style="width: 80%"
-                    class="btn btn-primary top-buffer-s"
-                    :disabled="proposal.can_user_edit"
-                    @click.prevent="issueProposal()"
-                  >
-                    Approve
-                  </button>
-                </div>
-                <div class="col-sm-12">
-                  <button
-                    style="width: 80%"
-                    class="btn btn-primary top-buffer-s"
-                    :disabled="proposal.can_user_edit"
-                    @click.prevent="declineProposal()"
-                  >
-                    Decline
-                  </button>
-                </div>
-              </template>
-            </div>
+              </div>
+              <div class="col-sm-12">
+                <button
+                  style="width: 80%"
+                  class="btn btn-primary top-buffer-s"
+                  :disabled="proposal.can_user_edit"
+                  @click.prevent="amendmentRequest()"
+                >
+                  Request Amendment
+                </button>
+              </div>
+              <div class="col-sm-12">
+                <button
+                  style="width: 80%"
+                  class="btn btn-primary top-buffer-s"
+                  :disabled="proposal.can_user_edit"
+                  @click.prevent="issueProposal()"
+                >
+                  Approve
+                </button>
+              </div>
+              <div class="col-sm-12">
+                <button
+                  style="width: 80%"
+                  class="btn btn-primary top-buffer-s"
+                  :disabled="proposal.can_user_edit"
+                  @click.prevent="declineProposal()"
+                >
+                  Decline
+                </button>
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -366,7 +362,7 @@
               <table
                 ref="contacts_datatable"
                 :id="contacts_table_id"
-                class="mt-2 hover table table-striped table-bordered dt-responsive"
+                class="mt-2 hover table table-striped table-bordered dt-responsive pt-2"
                 cellspacing="0"
                 width="100%"
               ></table>
@@ -1244,24 +1240,6 @@ export default {
         this.loading.splice("Loading Proposal", 1);
       });
   },
-  /*
-    beforeRouteEnter: function(to, from, next) {
-          Vue.http.get(`/api/proposal/${to.params.proposal_id}/internal_proposal.json`).then(res => {
-              next(vm => {
-                  vm.proposal = res.body;
-                  console.log(res.body)
-                  vm.original_proposal = helpers.copyObject(res.body);
-                  if (vm.proposal.applicant) {
-                      vm.proposal.applicant.address = vm.proposal.applicant.address != null ? vm.proposal.applicant.address : {};
-                  }
-                  vm.hasAmendmentRequest=vm.proposal.hasAmendmentRequest;
-              });
-            },
-            err => {
-              console.log(err);
-            });
-    },
-    */
   beforeRouteUpdate: function (to, from, next) {
     console.log("beforeRouteUpdate");
     fetch(`/api/proposal/${to.params.proposal_id}.json`)
@@ -1304,5 +1282,9 @@ export default {
   margin-top: 15px;
   margin-bottom: 10px;
   width: 100%;
+}
+
+.sticky-top {
+  top: 1.5em;
 }
 </style>
