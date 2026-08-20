@@ -362,7 +362,7 @@
               <table
                 ref="contacts_datatable"
                 :id="contacts_table_id"
-                class="mt-2 hover table table-striped table-bordered dt-responsive"
+                class="mt-2 hover table table-striped table-bordered dt-responsive pt-2"
                 cellspacing="0"
                 width="100%"
               ></table>

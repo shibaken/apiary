@@ -595,10 +595,11 @@
             Index="contact_details"
           >
             <div v-if="organisationApplicant">
+              test
               <table
                 ref="contacts_datatable"
                 :id="contacts_table_id"
-                class="hover table border table-striped table-bordered dt-responsive"
+                class="hover table border table-striped table-bordered dt-responsive pt-2"
                 cellspacing="0"
                 width="100%"
               ></table>
