@@ -472,14 +472,6 @@ export default {
           className: "noexport",
           defaultContent: "",
         },
-        {
-          data: "template_group",
-          searchable: false,
-          orderable: false,
-          visible: false,
-          className: "noexport",
-          defaultContent: "",
-        },
       );
       return columnList;
     },
