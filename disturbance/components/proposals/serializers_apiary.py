@@ -20,7 +20,6 @@ from disturbance.components.main.utils import (
     get_feature_in_wa_coastline_smoothed,
     get_region_district,
     get_status_for_export,
-    get_template_group,
     get_tenure,
     validate_buffer,
 )
@@ -1459,13 +1458,11 @@ class ApiaryInternalProposalSerializer(BaseProposalSerializer):
 
     def get_assessor_mode(self,obj):
         request = self.context['request']
-        template_group = get_template_group(request)
         user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
-        assessor_can_assess = obj.can_assess(user) if template_group == 'apiary' else False
         return {
             'assessor_mode': True,
             'has_assessor_mode': obj.has_assessor_mode(user),
-            'assessor_can_assess': assessor_can_assess,
+            'assessor_can_assess': obj.can_assess(user),
             'assessor_level': 'assessor',
             'assessor_box_view': obj.assessor_comments_view(user)
         }
