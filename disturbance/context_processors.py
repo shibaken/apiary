@@ -1,7 +1,7 @@
 from confy import env
 from django.conf import settings
+from disturbance.components.main.utils import get_template_group
 from disturbance.settings import (
-    TEMPLATE_GROUP,
     TEMPLATE_HEADER_LOGO,
     TEMPLATE_TITLE,
 )
@@ -26,13 +26,14 @@ def apiary_url(request):
         checkouthash =  hashlib.sha256(str(request.session["payment_pk"]).encode('utf-8')).hexdigest()
 
     return {
-        "template_group": TEMPLATE_GROUP,
+        "template_group": settings.TEMPLATE_GROUP,
         "template_header_logo": TEMPLATE_HEADER_LOGO,
         "template_title": TEMPLATE_TITLE,
         'DEBUG': settings.DEBUG,
-        'TEMPLATE_GROUP': 'apiary',
         'SYSTEM_NAME': settings.SYSTEM_NAME,
         'PUBLIC_URL': PUBLIC_URL,
+        'TEMPLATE_GROUP': get_template_group(request), # Bad naming since we also have TEMPLATE_GROUP in settings however this one which always returns 'apiary'
+        # may still be used in some places
         'APPLICATION_GROUP': 'apiary',
         'DISPLAYED_SYSTEM_NAME': displayed_system_name,
         'SUPPORT_EMAIL': support_email,
