@@ -239,7 +239,7 @@ LOGGING["loggers"]["asyncio"] = {"level": "INFO", "propagate": False}
 
 TEMPLATE_TITLE = "Apiary System"
 TEMPLATE_HEADER_LOGO = "/static/disturbance/img/logo-park-stay-trunc.gif"
-TEMPLATE_GROUP = "parkswildlifev2"
+TEMPLATE_GROUP = "parkswildlife"
 
 LEDGER_TEMPLATE = "bootstrap5"
 

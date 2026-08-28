@@ -324,16 +324,12 @@ class ProposalPaginatedViewSet(viewsets.ReadOnlyModelViewSet):
         http://localhost:8499/api/proposal_paginated/referrals_internal/?format=datatables&draw=1&length=2
         """
         template_group = get_template_group(request)
-        if template_group == "apiary":
-            qs = (
-                Referral.objects.filter(apiary_referral__referral_group__members=request.user)
-                if is_internal(self.request)
-                else Referral.objects.none()
-            )
-        else:
-            qs = (
-                Referral.objects.filter(referral=request.user) if is_internal(self.request) else Referral.objects.none()
-            )
+        
+        qs = (
+            Referral.objects.filter(apiary_referral__referral_group__members=request.user)
+            if is_internal(self.request)
+            else Referral.objects.none()
+        )
 
         qs = self.filter_queryset(qs)
 

@@ -1,9 +1,9 @@
 from django.conf import settings
 from disturbance import helpers
+from disturbance.components.main.utils import get_template_group
 
 
 def disturbance_url(request):
-    template_group = 'apiary'
     is_apiary_admin = ''
     TERMS = "/know/online-disturbance-apiary-terms-and-conditions"
 
@@ -17,9 +17,7 @@ def disturbance_url(request):
         'APIARY_SEARCH': '/external/payment',
         'APIARY_CONTACT': '/contact-us',
         'APIARY_TERMS': TERMS,
-        # 'DEV_STATIC': settings.DEV_STATIC,
-        # 'DEV_STATIC_URL': settings.DEV_STATIC_URL,
-        'TEMPLATE_GROUP': template_group,
+        'TEMPLATE_GROUP': get_template_group(request),
         'SYSTEM_NAME': settings.SYSTEM_NAME,
         'IS_OFFICER': is_officer,
         'IS_ADMIN': is_admin,
@@ -33,6 +31,3 @@ def template_context(request):
     """
     context = disturbance_url(request)
     return context
-
-
-
