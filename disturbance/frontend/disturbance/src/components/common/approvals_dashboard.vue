@@ -414,7 +414,7 @@ export default {
           defaultContent: "",
         },
         {
-          data: "",
+          data: "current_proposal",
           mRender: function (data, type, full) {
             let links = "";
             if (!vm.is_external) {
