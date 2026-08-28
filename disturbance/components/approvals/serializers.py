@@ -563,6 +563,8 @@ class DTApprovalSerializer(serializers.ModelSerializer):
             "template_group",
         )
 
+        datatables_always_serialize = fields
+
     def get_allowed_assessors(self, obj):
         return EmailUserSerializer(obj.current_proposal.compliance_assessors, many=True).data
 
